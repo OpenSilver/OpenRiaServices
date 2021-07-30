@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
-    <PackageReference Include="OpenSilver.WorkInProgress" Version="1.0.0-alpha-008" />
+    <PackageReference Include="OpenSilver.WorkInProgress" Version="1.0.0-alpha-020" />
     <PackageReference Include="System.ServiceModel.Http" Version="4.6.0" />
   </ItemGroup>
 

@@ -17,7 +17,7 @@
         <dependencies>
             <group>
                 <dependency id="OpenRiaServices.OpenSilver.Client.Core" version="$version$"/>
-                <dependency id="OpenRiaServices.Client.CodeGen" version="$version$"/>
+                <dependency id="OpenRiaServices.Client.CodeGen" version="5.0.0-preview0003"/>
             </group>
         </dependencies>
     </metadata>
