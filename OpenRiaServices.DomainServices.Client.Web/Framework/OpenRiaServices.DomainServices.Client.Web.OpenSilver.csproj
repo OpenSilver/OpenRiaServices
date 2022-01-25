@@ -1,0 +1,89 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <VersionPrefix>4.0.0</VersionPrefix>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <PackageTags>WCF;RIA;Services;RIAServices;Silverlight;OpenRiaServices</PackageTags>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="OpenSilver" Version="1.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="System.ServiceModel.Primitives" Version="4.7.0" />
+    <PackageReference Include="System.ServiceModel.Http" Version="4.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Data\ServiceQuery.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\AsyncResultBase.cs">
+      <Link>AsyncResultBase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Data\BinaryTypeUtility.cs">
+      <Link>Data\BinaryTypeUtility.cs</Link>
+    </Compile>
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Data\DomainClientAsyncResult.cs">
+      <Link>Data\DomainClientAsyncResult.cs</Link>
+    </Compile>
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Data\TypeUtility.cs">
+      <Link>Data\TypeUtility.cs</Link>
+    </Compile>
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\ExceptionHandlingUtility.cs">
+      <Link>Data\ExceptionHandlingUtility.cs</Link>
+    </Compile>
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\Services\Behaviors\WebHttpQueryStringConverter.cs">
+      <Link>Web\Behaviors\WebHttpQueryStringConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\OpenRiaServices.DomainServices.hosting\framework\services\messageencoders\PoxBinaryMessageEncodingBindingElement.cs">
+      <Link>Data\MessageEncoders\PoxBinaryMessageEncodingBindingElement.cs</Link>
+    </Compile>
+  </ItemGroup>
+
+  <!-- Remove ServiceModel.Web dependent parts (binary endpoint) -->
+  <ItemGroup>
+    <Compile Remove="Data\Behaviors\MessageUtility.cs" />
+    <Compile Remove="Web\WebDomainClientFactory.cs" />
+    <Compile Remove="Web\Behaviors\WebDomainClientWebHttpBehavior.cs" />
+    <Compile Remove="..\..\OpenRiaServices.DomainServices.Hosting\Framework\Services\Behaviors\WebHttpQueryStringConverter.cs" />
+    <Compile Remove="..\..\OpenRiaServices.DomainServices.hosting\framework\services\messageencoders\PoxBinaryMessageEncodingBindingElement.cs" />
+    <Compile Remove="Data\WebDomainClient.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Client\Framework\OpenRiaServices.DomainServices.Client.OpenSilver.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Data\Resource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Data\Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>OpenRiaServices.DomainServices.Client</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>OpenRiaServices.DomainServices.Client</CustomToolNamespace>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <DefineSilverlight>true</DefineSilverlight>
+    <AssemblyName>OpenRiaServices.DomainServices.Client.Web</AssemblyName>
+    <RootNamespace>OpenRiaServices.DomainServices.Client.Web</RootNamespace>
+  </PropertyGroup>
+
+</Project>

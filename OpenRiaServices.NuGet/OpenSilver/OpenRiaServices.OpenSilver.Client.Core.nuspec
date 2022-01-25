@@ -2,11 +2,12 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>OpenSilver.OpenRiaServices.Client.Core.4.6</id>
-    <version>1.0.0-beta.1.22.1</version>
+    <version>$PackageVersion$</version>
     <title>Open RIA Services v4.6 Client</title>
     <authors>Userware</authors>
     <license type="expression">Apache-2.0</license>
     <projectUrl>https://github.com/OpenSilver/OpenRiaServices</projectUrl>
+    <repository type="git" url="$RepositoryUrl$" />
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>
       OpenRiaServices.Client.Core provides the OpenRiaServices.DomainServices.Client and OpenRiaServices.DomainServices.Client.Web assemblies for your client projects. This version of OpenRiaServices is designed for use in OpenSilver projects (cf. https://opensilver.net/)
@@ -21,7 +22,7 @@
         <dependency id="System.ComponentModel.Annotations" version="4.7.0" />
         <dependency id="System.ServiceModel.Http" version="4.7.0" />
         <dependency id="Newtonsoft.Json" version="12.0.3" />
-        <dependency id="OpenSilver" version="1.0.0-beta.1.22" />
+        <dependency id="OpenSilver" version="$OpenSilverDependencyVersion$" />
       </group>
     </dependencies>
   </metadata>

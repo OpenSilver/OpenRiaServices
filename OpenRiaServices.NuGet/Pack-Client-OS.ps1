@@ -1,7 +1,9 @@
 param(
     [string]$Path = ".",
 	[string[]]$Include =  @("OpenRiaServices.OpenSilver.Client.Core.nuspec", "OpenRiaServices.OpenSilver.Client.nuspec"),
-	[string]$Version = $null,
+	[string]$Version = "1.0.0",
+	[string]$OpenSilverDependencyVersion = "1.0.0",
+	[string]$RepositoryUrl = "https://github.com/OpenSilver/OpenRiaServices",
 	[string]$NuGetPath
 )
 
@@ -13,19 +15,17 @@ if (-not (Test-Path $outputDir)) {
     mkdir $outputDir
 }
 
-# If NuGet path is not specified then chekc one folder above git repo, or hope for it to be in the path
+# If NuGet path is not specified then check one folder above git repo, or hope for it to be in the path
 if ([string]::IsNullOrEmpty($NuGetPath))
 {
 	if (Test-Path ..\..\NuGet.exe) { $NuGetPath = "..\..\NuGet.exe"}
 	else { $NuGetPath = "nuget.exe"}
 }
-[string[]]$NuGetParameters = @("-OutputDirectory", "$outputDir")
-if (-not [string]::IsNullOrEmpty($Version)) {$NuGetParameters = $NuGetParameters + @("-Version", $Version)}
 
 foreach($nuspec in (dir $Path -Recurse -Include $Include))
 {
         echo "Building $nuspec"
-        & $NuGetPath pack ($nuspec) $NuGetParameters
+        & $NuGetPath pack ($nuspec) -OutputDirectory $outputDir -Properties "PackageVersion=$Version;OpenSilverDependencyVersion=$OpenSilverDependencyVersion;RepositoryUrl=$RepositoryUrl;"
 }
 
 Pop-Location

@@ -1,0 +1,42 @@
+name: OpenRia Build
+on:
+  # We run the process manually and pass the version of actual OpenSilver
+  workflow_dispatch:
+    inputs:
+      opensilver-version:
+        description: 'OpenSilver package version'
+        required: true
+jobs:
+  OpenRia-Build:
+    runs-on: windows-latest
+    steps:
+      - uses: microsoft/setup-msbuild@v1.0.3
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v3.x
+      - uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.101'
+          source-url: https://nuget.pkg.github.com/OpenSilver/index.json
+        env:
+          NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Clone repo
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+      - name: Replace existing package with actual one
+        run: |
+          dotnet add OpenRiaServices.DomainServices.Client.Web\Framework\OpenRiaServices.DomainServices.Client.Web.OpenSilver.csproj package OpenSilver -v ${{ github.event.inputs.opensilver-version }}
+          dotnet add OpenRiaServices.DomainServices.Client\Framework\OpenRiaServices.DomainServices.Client.OpenSilver.csproj package OpenSilver -v ${{ github.event.inputs.opensilver-version }}
+      - name: Build solution
+        run: |
+          msbuild OpenRiaServices.OpenSilver.sln -p:Configuration=Release -clp:ErrorsOnly -restore
+      - name: Format Package Version
+        id: version
+        run: echo "::set-output name=suffix::$(date +'%Y-%m-%d-%H%M%S')-${{ env.GITHUB_SHA_SHORT }}"
+      - name: Build packages
+        working-directory: OpenRiaServices.NuGet
+        run: |
+          .\Pack-Client-OS.ps1 -Version 1.0.0-private-${{ steps.version.outputs.suffix }} -OpenSilverDependencyVersion ${{ github.event.inputs.opensilver-version }} -RepositoryUrl https://github.com/${{ env.GITHUB_REPOSITORY_OWNER_PART }}/${{ env.GITHUB_REPOSITORY_NAME_PART }}
+      - name: Upload packages
+        run: |
+           dotnet nuget push "OpenRiaServices.NuGet\bin\opensilver\*.nupkg" -k ${{ secrets.GITHUB_TOKEN }} -s https://nuget.pkg.github.com/${{ env.GITHUB_REPOSITORY_OWNER_PART }}/index.json
