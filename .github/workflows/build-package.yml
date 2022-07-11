@@ -2,6 +2,7 @@ name: OpenRia Build
 env:
   solution: 'OpenRiaServices.OpenSilver.sln'
   opensilver-package-source: 'https://www.myget.org/F/opensilver/api/v3/index.json'
+  next-release-version: '1.1.0'
 on:
   # We run the process manually and pass the version of actual OpenSilver
   workflow_dispatch:
@@ -59,7 +60,7 @@ jobs:
       - name: Build packages
         working-directory: OpenRiaServices.NuGet
         run: |
-          .\Pack-Client-OS.ps1 -Version 1.0.0-private-${{ steps.vars.outputs.suffix }} -OpenSilverDependencyVersion ${{ steps.vars.outputs.opensilver-version }} -RepositoryUrl https://github.com/${{ env.GITHUB_REPOSITORY_OWNER_PART }}/${{ env.GITHUB_REPOSITORY_NAME_PART }}
+          .\Pack-Client-OS.ps1 -Version ${{ env.next-release-version }}-preview-${{ steps.vars.outputs.suffix }} -OpenSilverDependencyVersion ${{ steps.vars.outputs.opensilver-version }} -RepositoryUrl https://github.com/${{ env.GITHUB_REPOSITORY_OWNER_PART }}/${{ env.GITHUB_REPOSITORY_NAME_PART }}
       - name: Upload packages
         run: |
            dotnet nuget push "OpenRiaServices.NuGet\bin\opensilver\*.nupkg" -k ${{ secrets.GITHUB_TOKEN }} -s https://nuget.pkg.github.com/${{ env.GITHUB_REPOSITORY_OWNER_PART }}/index.json
