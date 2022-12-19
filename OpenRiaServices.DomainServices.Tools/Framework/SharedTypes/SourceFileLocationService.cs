@@ -43,7 +43,7 @@
         /// </param>
         internal SourceFileLocationService(IEnumerable<ISourceFileProviderFactory> providerFactories, FilenameMap filenameMap)
         {
-            Debug.Assert(providerFactories != null && providerFactories.Count() > 0, "providerFactories are required");
+            Debug.Assert(providerFactories != null && providerFactories.Any(), "providerFactories are required");
             Debug.Assert(filenameMap != null, "filenameMap is required");
 
             this._filenameMap = filenameMap;
@@ -62,7 +62,7 @@
         {
             if (type == null)
             {
-                throw new ArgumentNullException("type");
+                throw new ArgumentNullException(nameof(type));
             }
 
             //  Get the list of members for this type
@@ -86,7 +86,7 @@
         {
             if (memberInfo == null)
             {
-                throw new ArgumentNullException("memberInfo");
+                throw new ArgumentNullException(nameof(memberInfo));
             }
 
             // Either load the members or retrieve them from the cache.
@@ -229,7 +229,7 @@
                 provider.Dispose();
             }
 
-            this._providers = new ISourceFileProvider[0];
+            this._providers = Array.Empty<ISourceFileProvider>();
         }
 
         #endregion

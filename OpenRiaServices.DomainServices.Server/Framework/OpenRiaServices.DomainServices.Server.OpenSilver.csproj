@@ -1,0 +1,50 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <TargetFramework>net45</TargetFramework>
+    <DefineConstants>$(DefineConstants);SERVERFX</DefineConstants>
+    <AssemblyName>OpenRiaServices.DomainServices.Server</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" />
+    <Reference Include="system" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Web" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Data\BinaryTypeUtility.cs" Link="Data\BinaryTypeUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Data\DomainException.cs" Link="Data\DomainException.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Data\DomainIdentifierAttribute.cs" Link="Data\DomainIdentifierAttribute.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Data\ExternalReferenceAttribute.cs" Link="Data\ExternalAttribute.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Data\RoundtripOriginalAttribute.cs" Link="Data\RoundtripOriginalAttribute.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Data\Serialization\KeyValue.cs" Link="Data\Serialization\KeyValue.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Data\TypeUtility.cs" Link="Data\TypeUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Data\ValidationUtilities.cs" Link="Data\ValidationUtilities.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\ExceptionHandlingUtility.cs" Link="Data\ExceptionHandlingUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Data\ValidationResultInfo.cs" Link="Data\ValidationResultInfo.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\Services\SerializationUtility.cs" Link="ApplicationServices\SerializationUtility.cs" />
+    <Compile Update="Data\Resource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+    <Compile Condition=" '$(RunCodeAnalysis)' == 'true' " Update="GlobalSuppressions.cs" />
+    <Compile Update="Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Data\Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>OpenRiaServices.DomainServices.Server</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Condition=" '$(RunCodeAnalysis)' != 'true' " Remove="GlobalSuppressions.cs" />
+  </ItemGroup>
+</Project>

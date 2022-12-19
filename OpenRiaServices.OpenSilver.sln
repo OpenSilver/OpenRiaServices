@@ -11,6 +11,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Controls.Do
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Data.DomainServices.OpenSilver", "OpenRiaServices.Data.DomainServices\Framework\OpenRiaServices.Data.DomainServices.OpenSilver.csproj", "{AECC0937-9D1F-4000-9AF7-0828D90180E7}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CodeGen", "CodeGen", "{98FA106E-BC69-4FF6-B2E7-969C0F7865C7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Tools.OpenSilver", "OpenRiaServices.DomainServices.Tools\Framework\OpenRiaServices.DomainServices.Tools.OpenSilver.csproj", "{19468F4F-0EFD-456D-8FD5-D84600C68678}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{403BAEF1-7900-4FC2-BA07-002005E9B5AC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Hosting.OpenSilver", "OpenRiaServices.DomainServices.Hosting\Framework\OpenRiaServices.DomainServices.Hosting.OpenSilver.csproj", "{E6503D67-82E2-495C-87A9-7FFCAE12B447}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Server.OpenSilver", "OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.OpenSilver.csproj", "{BA0FCD1A-E16E-482B-A467-032130A4CD68}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,9 +43,26 @@ Global
 		{AECC0937-9D1F-4000-9AF7-0828D90180E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AECC0937-9D1F-4000-9AF7-0828D90180E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AECC0937-9D1F-4000-9AF7-0828D90180E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19468F4F-0EFD-456D-8FD5-D84600C68678}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19468F4F-0EFD-456D-8FD5-D84600C68678}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19468F4F-0EFD-456D-8FD5-D84600C68678}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19468F4F-0EFD-456D-8FD5-D84600C68678}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6503D67-82E2-495C-87A9-7FFCAE12B447}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6503D67-82E2-495C-87A9-7FFCAE12B447}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6503D67-82E2-495C-87A9-7FFCAE12B447}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6503D67-82E2-495C-87A9-7FFCAE12B447}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA0FCD1A-E16E-482B-A467-032130A4CD68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA0FCD1A-E16E-482B-A467-032130A4CD68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA0FCD1A-E16E-482B-A467-032130A4CD68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA0FCD1A-E16E-482B-A467-032130A4CD68}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{19468F4F-0EFD-456D-8FD5-D84600C68678} = {98FA106E-BC69-4FF6-B2E7-969C0F7865C7}
+		{E6503D67-82E2-495C-87A9-7FFCAE12B447} = {403BAEF1-7900-4FC2-BA07-002005E9B5AC}
+		{BA0FCD1A-E16E-482B-A467-032130A4CD68} = {403BAEF1-7900-4FC2-BA07-002005E9B5AC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4A88992A-A496-48E5-A6C1-2BC2D9569E46}

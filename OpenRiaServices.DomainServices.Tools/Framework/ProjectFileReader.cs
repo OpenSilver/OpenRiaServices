@@ -34,7 +34,7 @@ namespace OpenRiaServices.DomainServices.Tools
         {
             if (logger == null)
             {
-                throw new ArgumentNullException("logger");
+                throw new ArgumentNullException(nameof(logger));
             }
 
             this._logger = logger;
@@ -89,7 +89,7 @@ namespace OpenRiaServices.DomainServices.Tools
         {
             if (string.IsNullOrEmpty(projectPath))
             {
-                throw new ArgumentNullException("projectPath");
+                throw new ArgumentNullException(nameof(projectPath));
             }
 
             if (!File.Exists(projectPath))
@@ -164,7 +164,7 @@ namespace OpenRiaServices.DomainServices.Tools
         /// <returns>The list of full project file names referred by by the given project.</returns>
         internal IEnumerable<string> LoadProjectReferences(string projectPath)
         {
-            IEnumerable<string> projects = new string[0];
+            IEnumerable<string> projects = Array.Empty<string>();
 
             Project project = this.LoadProject(projectPath);
             if (project == null)
@@ -205,7 +205,7 @@ namespace OpenRiaServices.DomainServices.Tools
         /// <returns>A non-null (but possibly empty) list of full paths to files.</returns>
         internal IEnumerable<string> LoadSourceFilesFromProject(string projectPath)
         {
-            IEnumerable<string> sources = new string[0];
+            IEnumerable<string> sources = Array.Empty<string>();
             Project project = this.LoadProject(projectPath);
             if (project == null)
             {

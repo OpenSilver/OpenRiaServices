@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+    <metadata minClientVersion="2.8">
+        <id>OpenSilver.OpenRiaServices.CodeGen.4.6</id>
+        <version>$PackageVersion$</version>
+        <title>Open RIA Services Code Generator</title>
+        <authors>Userware</authors>
+        <license type="expression">Apache-2.0</license>
+        <projectUrl>https://github.com/OpenSilver/OpenRiaServices</projectUrl>
+        <repository type="git" url="$RepositoryUrl$" />
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Code generation for OpenSilver targets</description>
+        <summary>Open RIA Services - Silverlight client assemblies and references.</summary>
+        <developmentDependency>true</developmentDependency>
+        <copyright>Copyright (c) 2022, Userware. All rights reserved.</copyright>
+        <language>en-US</language>
+        <tags>OpenSilver WCF RIA Services RIAServices Silverlight OpenRiaServices CodeGen</tags>
+        <dependencies>
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="..\OpenRiaServices.Client.CodeGen\build\OpenSilver.OpenRiaServices.CodeGen.4.6.targets" target="build\OpenSilver.OpenRiaServices.CodeGen.4.6.targets"/>
+        <file src="..\..\bin\Release\net46\OpenRiaServices.DomainServices.Tools.OpenSilver.dll" target="build\OpenRiaServices.DomainServices.Tools.OpenSilver.dll"/>
+        <file src="..\..\bin\Release\net46\Mono.Cecil.dll" target="build\Mono.Cecil.dll"/>
+    </files>
+</package>
