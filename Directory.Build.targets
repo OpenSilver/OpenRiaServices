@@ -1,0 +1,7 @@
+<Project>
+  <PropertyGroup>
+    <OpenSilverPackageVersion>*</OpenSilverPackageVersion>
+    <EnableAdditionalMetadataAttributes>true</EnableAdditionalMetadataAttributes>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+</Project>

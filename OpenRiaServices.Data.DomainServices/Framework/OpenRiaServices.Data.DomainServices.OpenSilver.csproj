@@ -15,7 +15,6 @@
     <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\WeakCollectionChangedListener.cs">
       <Link>WeakCollectionChangedListener.cs</Link>
     </Compile>
-    <PackageReference Include="OpenSilver" Version="1.1.0" />
     <Compile Update="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

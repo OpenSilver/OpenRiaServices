@@ -42,31 +42,15 @@ jobs:
           if ($suffix -eq "rc") {
             $source = "${{ secrets.MYGET_PRIVATE_RC_FEED_V3 }}"
           }
-          if ($version -eq "latest") {
+          if ($version -eq "latest" -or $version -eq "") {
             $version = nuget list -Source $source -Prerelease | ? { $_ -match "^OpenSilver\s+(.*)" } | ForEach { $_.split(" ")[1] }
           }
           echo "Version: $version"
           echo "::set-output name=opensilver-version::$version"
           echo "::set-output name=suffix::$(date +'%Y-%m-%d-%H%M%S')-${{ env.GITHUB_SHA_SHORT }}"
-      - name: Remove OpenSilver packages for all projects
-        run: |
-          foreach ($project in dotnet sln ${{ env.solution }} list | Select-Object -Skip 2) {
-            dotnet remove $project package OpenSilver
-            if (-not $?) {throw "Failed to remove package"}
-          }
-        env:
-          DOTNET_NOLOGO: true
-      - name: Add OpenSilver package for all projects
-        run: |
-          foreach ($project in dotnet sln ${{ env.solution }} list | Select-Object -Skip 2) {
-            dotnet add $project package OpenSilver -v ${{ steps.vars.outputs.opensilver-version }}
-            if (-not $?) {throw "Failed to add package"}
-          }
-        env:
-          DOTNET_NOLOGO: true
       - name: Build solution
         run: |
-          msbuild ${{ env.solution }} -p:Configuration=Release -clp:ErrorsOnly -restore
+          msbuild ${{ env.solution }} -p:Configuration=Release -p:OpenSilverPackageVersion=${{ steps.vars.outputs.opensilver-version }} -clp:ErrorsOnly -restore
       - name: Format Version Suffix
         id: format-suffix
         run: echo "::set-output name=suffix::$(date +'%Y-%m-%d-%H%M%S')-${{ env.GITHUB_SHA_SHORT }}"
