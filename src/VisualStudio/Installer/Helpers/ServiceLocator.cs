@@ -64,7 +64,7 @@ namespace OpenRiaServices.VisualStudio.Installer.Helpers
         private static TService GetDTEService<TService>() where TService : class
         {
             var dte = GetGlobalService<SDTE, DTE>();
-            return (TService)QueryService(dte, typeof(TService));
+            return (TService)QueryService((_DTE)dte, typeof(TService));
         }
 
         private static TService GetComponentModelService<TService>() where TService : class
@@ -76,7 +76,7 @@ namespace OpenRiaServices.VisualStudio.Installer.Helpers
         private static IServiceProvider GetServiceProvider()
         {
             var dte = GetGlobalService<SDTE, DTE>();
-            return GetServiceProvider(dte);
+            return GetServiceProvider((_DTE)dte);
         }
 
         private static object QueryService(_DTE dte, Type serviceType)

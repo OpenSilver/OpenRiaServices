@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
-	<GeneratePkgDefFile>false</GeneratePkgDefFile>
+    <GeneratePkgDefFile>false</GeneratePkgDefFile>
     <ProjectTypeGuids>{82b43b9b-a64c-4715-b499-d71e9ca2bd60};{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <ProjectGuid>{DFD7622B-7F9A-42B7-9460-7078D34BCDE8}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -18,7 +18,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>OpenRiaServices.VisualStudio.Installer</RootNamespace>
     <AssemblyName>OpenRiaServices.VisualStudio.Installer</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <IncludeDebugSymbolsInLocalVSIXDeployment>false</IncludeDebugSymbolsInLocalVSIXDeployment>
     <TargetFrameworkProfile />
     <!--prevent build server errors about to long path on deployment to experimental instance-->
@@ -27,6 +27,7 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
     <VSIXSubPath>OpenRiaServices</VSIXSubPath>
+    <IncludeDebugSymbolsInVSIXContainer>true</IncludeDebugSymbolsInVSIXContainer>
   </PropertyGroup>
   <PropertyGroup>
     <StartAction>Program</StartAction>
@@ -50,14 +51,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.VisualStudio.ManagedInterfaces.9.0" Version="9.0.30730" />
-    <PackageReference Include="Microsoft.VisualStudio.ManagedInterfaces.WCF" Version="9.0.21023" />
     <PackageReference Include="Microsoft.VisualStudio.SDK">
       <Version>17.7.37357</Version>
     </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Validation" Version="14.0.50702" />
-    <PackageReference Include="Microsoft.VisualStudio.Threading" Version="14.0.50702" />
-    <PackageReference Include="Microsoft.VisualStudio.Utilities" Version="14.0.23205" />
     <PackageReference Include="Microsoft.VSSDK.BuildTools">
       <Version>17.7.2196</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
