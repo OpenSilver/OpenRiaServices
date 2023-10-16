@@ -29,6 +29,7 @@
     <DefineConstants Condition="'$(VsVersion)' == '14.0'">$(DefineConstants);VS14</DefineConstants>
     <DefineConstants Condition="'$(VsVersion)' == '15.0'">$(DefineConstants);VS15</DefineConstants>
     <DefineConstants Condition="'$(VsVersion)' == '16.0'">$(DefineConstants);VS16</DefineConstants>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.2.0" />

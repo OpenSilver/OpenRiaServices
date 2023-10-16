@@ -104,7 +104,8 @@ namespace OpenRiaServices.VisualStudio.Installer
             var nameComparison = StringComparison.OrdinalIgnoreCase;
 
             if (args.Name != null
-                && args.Name.StartsWith("OpenRiaServices.VisualStudio.DomainServices.Tools", nameComparison))
+                && args.Name.StartsWith("OpenRiaServices.VisualStudio.DomainServices.Tools", nameComparison)
+                && args.Name.IndexOf("PublicKeyToken=null", nameComparison) != -1)
             {
                 return typeof(DomainServices.Tools.DomainServiceClassWizard).Assembly;
             }
