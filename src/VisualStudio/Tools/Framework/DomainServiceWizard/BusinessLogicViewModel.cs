@@ -79,6 +79,18 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
             this._assemblyName = assemblyName;
             this._contextTypes = new List<Type>(contextTypes);
             this._help = help;
+
+            AppDomain.CurrentDomain.AssemblyResolve += OnAssemblyResolve;
+        }
+
+        private Assembly OnAssemblyResolve(object sender, ResolveEventArgs args)
+        {
+            if (args.Name.StartsWith("OpenRiaServices.VisualStudio.DomainServices.Tools.14.0"))
+            {
+                return typeof(BusinessLogicViewModel).Assembly;
+            }
+
+            return null;
         }
 
         /// <summary>
