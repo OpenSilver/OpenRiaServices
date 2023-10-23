@@ -33,11 +33,11 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.2.0" />
-    <PackageReference Include="Microsoft.VisualStudio.ComponentModelHost" Version="17.7.188" />
-    <PackageReference Include="Microsoft.VisualStudio.ManagedInterfaces.9.0" Version="17.5.33428.366" />
-    <PackageReference Include="Microsoft.VisualStudio.ManagedInterfaces.WCF" Version="17.5.33428.366" />
-    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.7.37357" />
-    <PackageReference Include="Microsoft.VisualStudio.TemplateWizardInterface" Version="17.5.33428.366" />
+    <PackageReference Include="Microsoft.VisualStudio.ComponentModelHost" Version="16.11.52" />
+    <PackageReference Include="Microsoft.VisualStudio.ManagedInterfaces.9.0" Version="16.10.31320.204" />
+    <PackageReference Include="Microsoft.VisualStudio.ManagedInterfaces.WCF" Version="16.10.31320.204" />
+    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="16.10.31321.278" />
+    <PackageReference Include="Microsoft.VisualStudio.TemplateWizardInterface" Version="16.10.31320.204" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Accessibility" />
