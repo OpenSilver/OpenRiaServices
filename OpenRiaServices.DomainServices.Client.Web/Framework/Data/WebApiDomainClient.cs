@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
+using Newtonsoft.Json;
 
 namespace OpenRiaServices.DomainServices.Client.PortableWeb
 {
@@ -530,7 +531,9 @@ namespace OpenRiaServices.DomainServices.Client.PortableWeb
 
                 // TODO: JsonSerializerSettings , and ensure it is correctly configured
                 string value = Newtonsoft.Json.JsonConvert.SerializeObject(parameter, parameterType, new Newtonsoft.Json.JsonSerializerSettings()
-                    { });
+                {
+                    DateFormatHandling = DateFormatHandling.MicrosoftDateFormat
+                });
 
                 return Uri.EscapeDataString(value);
             }
@@ -552,7 +555,7 @@ namespace OpenRiaServices.DomainServices.Client.PortableWeb
                     // TODO: ENsure that DateTimeOffset is part of known types 
                     // Unlike other primitive types, the DateTimeOffset structure is not a known type by default, so it must be manually added to the list of known types.
                     serializer = new DataContractSerializer(type, EntityTypes);
-                    _serializerCache.Add(type, serializer);
+                    _serializerCache.Add(type, serializer); 
                 }
             }
 

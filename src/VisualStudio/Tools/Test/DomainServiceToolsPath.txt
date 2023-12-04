@@ -1,0 +1,1 @@
+C:\OpenRia\OpenRiaServices\src\VisualStudio\Tools\Test\OpenRiaServices.VisualStudio.DomainServices.Tools.Test.csproj
