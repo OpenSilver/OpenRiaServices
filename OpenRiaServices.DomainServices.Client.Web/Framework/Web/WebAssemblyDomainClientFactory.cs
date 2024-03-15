@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Reflection;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
-using System.Text;
 
 namespace OpenRiaServices.DomainServices.Client.Web
 {
@@ -23,6 +21,24 @@ namespace OpenRiaServices.DomainServices.Client.Web
         public WebAssemblyDomainClientFactory()
             : this(() => new HttpClient(HttpClientHandlerFactory.Create(), disposeHandler: false))
         {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WebAssemblyDomainClientFactory"/> class.
+        /// </summary>
+        /// <param name="serverBaseUri">
+        /// The value base all service Uris on (see <see cref="DomainClientFactory.ServerBaseUri"/>)
+        /// </param>
+        /// <param name="httpClientFactory">
+        /// Method creating a new <see cref="HttpClient"/> each time, should never return null
+        /// </param>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="httpClientFactory"/> is null.
+        /// </exception>
+        public WebAssemblyDomainClientFactory(Uri serverBaseUri, Func<HttpClient> httpClientFactory)
+            : this(httpClientFactory)
+        {
+            ServerBaseUri = serverBaseUri;
         }
 
         /// <summary>
@@ -61,6 +77,15 @@ namespace OpenRiaServices.DomainServices.Client.Web
         protected override Binding CreateBinding(Uri endpoint, bool requiresSecureEndpoint)
         {
             return new CustomBinding();
+        }
+
+        /// <inheritdoc />
+        protected override DomainClient CreateDomainClientCore(Type serviceContract, Uri serviceUri, bool requiresSecureEndpoint)
+        {
+            var actualMethod = _createInstanceMethod.MakeGenericMethod(serviceContract);
+            var parameters = new object[] { serviceUri, requiresSecureEndpoint };
+
+            return (DomainClient)actualMethod.Invoke(this, parameters);
         }
 
         private WebDomainClient<TContract> CreateInstance<TContract>(Uri serviceUri, bool requiresSecureEndpoint)
