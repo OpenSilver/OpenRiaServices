@@ -105,12 +105,20 @@ namespace OpenRiaServices.DomainServices.Client.PortableWeb
         protected virtual string EndpointSuffix => "/binary/";
 
         public WebApiDomainClient(Type serviceInterface, Uri baseUri, HttpMessageHandler handler)
+            : this(serviceInterface, baseUri, CreateHttpClient(handler))
         {
-            ServiceInterfaceType = serviceInterface;
-            _httpClient = new HttpClient(handler, disposeHandler: false)
+        }
+
+        public WebApiDomainClient(Type serviceInterface, Uri baseUri, HttpClient httpClient)
+        {
+            if (httpClient is null)
             {
-                BaseAddress = new Uri(baseUri.AbsoluteUri + EndpointSuffix, UriKind.Absolute),
-            };
+                throw new ArgumentNullException(nameof(httpClient));
+            }
+
+            ServiceInterfaceType = serviceInterface;
+            _httpClient = httpClient;
+            _httpClient.BaseAddress = new Uri(baseUri.AbsoluteUri + EndpointSuffix, UriKind.Absolute);
 
             lock (s_globalSerializerCache)
             {
@@ -120,6 +128,11 @@ namespace OpenRiaServices.DomainServices.Client.PortableWeb
                     s_globalSerializerCache.Add(serviceInterface, _serializerCache);
                 }
             }
+        }
+
+        private protected static HttpClient CreateHttpClient(HttpMessageHandler handler)
+        {
+            return new HttpClient(handler, disposeHandler: false);
         }
 
         internal Type ServiceInterfaceType { get; private set; }
