@@ -78,7 +78,7 @@ jobs:
           .\Pack-Client-OS.ps1 -Version ${{ env.next-release-version }} -OpenSilverDependencyVersion ${{ env.next-release-version }} -RepositoryUrl https://github.com/${{ env.GITHUB_REPOSITORY_OWNER_PART }}/${{ env.GITHUB_REPOSITORY_NAME_PART }}
         if: env.suffix == 'rc'
       - name: Upload artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: OpenRia4.6
           path: "OpenRiaServices.NuGet/bin/OpenSilver"
