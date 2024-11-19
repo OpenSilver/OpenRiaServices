@@ -20,8 +20,8 @@
     <dependencies>
       <group targetFramework="netstandard2.0">
         <dependency id="OpenSilver" version="$OpenSilverDependencyVersion$" />
-        <dependency id="System.ServiceModel.Http" version="4.10.0" />
-        <dependency id="Newtonsoft.Json" version="12.0.3" />
+        <dependency id="System.ServiceModel.Http" version="8.1.0" />
+        <dependency id="Newtonsoft.Json" version="13.0.3" />
       </group>
     </dependencies>
   </metadata>

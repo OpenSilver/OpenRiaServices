@@ -16,9 +16,8 @@
 
   <ItemGroup>
     <PackageReference Include="OpenSilver" Version="$(OpenSilverPackageVersion)" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="System.ServiceModel.Primitives" Version="4.10.0" />
-    <PackageReference Include="System.ServiceModel.Http" Version="4.7.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="System.ServiceModel.Http" Version="8.1.0" />
   </ItemGroup>
 
   <ItemGroup>
