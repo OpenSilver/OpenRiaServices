@@ -20,7 +20,7 @@
     <dependencies>
       <group targetFramework="netstandard2.0">
         <dependency id="OpenSilver" version="$OpenSilverDependencyVersion$" />
-        <dependency id="System.ServiceModel.Http" version="4.10.0" />
+        <dependency id="System.ServiceModel.Http" version="8.1.0" />
       </group>
     </dependencies>
   </metadata>
