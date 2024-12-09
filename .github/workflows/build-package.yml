@@ -2,7 +2,7 @@ name: OpenRia Build
 env:
   solution: 'OpenRiaServices.OpenSilver.sln'
   opensilver-package-source: 'https://www.myget.org/F/opensilver/api/v3/index.json'
-  next-release-version: '3.1.0'
+  next-release-version: '3.2.0'
   suffix: 'preview'
 on:
   # We run the process manually and pass the version of actual OpenSilver
