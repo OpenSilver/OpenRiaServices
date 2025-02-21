@@ -12,7 +12,7 @@
     <description>OpenSilver.OpenRiaServices.Data.DomainServices provides the archived OpenRiaServices.Data.DomainServices library to OpenSilver.</description>
     <summary>Open RIA Services - Data.DomainServices - For use in OpenSilver projects</summary>
     <!-- <releaseNotes>For release notes see https://github.com/OpenRIAServices/OpenRiaServices/releases</releaseNotes> -->
-    <copyright>Copyright (c) 2022, Userware. All rights reserved.</copyright>
+    <copyright>Copyright (c) 2025, Userware. All rights reserved.</copyright>
     <language>en-US</language>
     <tags>WCF RIA Services RIAServices Silverlight OpenRIAServices OpenSilver</tags>
     <dependencies>
