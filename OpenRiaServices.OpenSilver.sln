@@ -21,6 +21,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Server.OpenSilver", "OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.OpenSilver.csproj", "{BA0FCD1A-E16E-482B-A467-032130A4CD68}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build-package.yml = .github\workflows\build-package.yml
+		Directory.Build.targets = Directory.Build.targets
+		Nuget.Config = Nuget.Config
+		OpenRiaServices.NuGet\OpenSilver\OpenRiaServices.OpenSilver.Client.Core.nuspec = OpenRiaServices.NuGet\OpenSilver\OpenRiaServices.OpenSilver.Client.Core.nuspec
+		OpenRiaServices.NuGet\OpenSilver\OpenRiaServices.OpenSilver.Client.nuspec = OpenRiaServices.NuGet\OpenSilver\OpenRiaServices.OpenSilver.Client.nuspec
+		OpenRiaServices.NuGet\OpenSilver\OpenSilver.OpenRiaServices.CodeGen.nuspec = OpenRiaServices.NuGet\OpenSilver\OpenSilver.OpenRiaServices.CodeGen.nuspec
+		OpenRiaServices.NuGet\OpenSilver\OpenSilver.OpenRiaServices.DomainDataSource.nuspec = OpenRiaServices.NuGet\OpenSilver\OpenSilver.OpenRiaServices.DomainDataSource.nuspec
+		OpenRiaServices.NuGet\OpenSilver\OpenSilver.OpenRiaServices.ViewModel.nuspec = OpenRiaServices.NuGet\OpenSilver\OpenSilver.OpenRiaServices.ViewModel.nuspec
+		OpenRiaServices.NuGet\Pack-Client-OS.ps1 = OpenRiaServices.NuGet\Pack-Client-OS.ps1
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

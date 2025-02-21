@@ -12,7 +12,7 @@
         <description>Code generation for OpenSilver targets</description>
         <summary>Open RIA Services - Silverlight client assemblies and references.</summary>
         <developmentDependency>true</developmentDependency>
-        <copyright>Copyright (c) 2022, Userware. All rights reserved.</copyright>
+        <copyright>Copyright (c) 2025, Userware. All rights reserved.</copyright>
         <language>en-US</language>
         <tags>OpenSilver WCF RIA Services RIAServices Silverlight OpenRiaServices CodeGen</tags>
         <dependencies>
