@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -15,6 +16,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using Newtonsoft.Json;
+using OpenRiaServices.DomainServices.Client.Internal;
 
 namespace OpenRiaServices.DomainServices.Client.PortableWeb
 {
@@ -93,6 +95,75 @@ namespace OpenRiaServices.DomainServices.Client.PortableWeb
             protected override bool TryComputeLength(out long length)
             {
                 length = -1;
+                return false;
+            }
+        }
+
+        /// <remarks>
+        /// Adapted from:
+        /// <see href="https://github.com/Daniel-Svensson/OpenRiaPlayground/blob/43665c1b4febeb2f9ab7a358a75709f52169cb77/HttpClient/OpenRiaServices.Client.HttpDomainClient/BinaryHttpDomainClient.SubmitDataContractResolver.cs#L10">
+        /// OpenRiaPlayground - BinaryHttpDomainClient.SubmitDataContractResolver.cs (GitHub)
+        /// </see>
+        /// </remarks>
+        class SubmitDataContractResolver : DataContractResolver
+        {
+            private readonly ConcurrentDictionary<Type, (System.Xml.XmlDictionaryString typeName, System.Xml.XmlDictionaryString typeNamespace)> _knownTypes
+                = new ConcurrentDictionary<Type, (System.Xml.XmlDictionaryString, System.Xml.XmlDictionaryString)>();
+
+            public override Type ResolveName(string typeName, string typeNamespace, Type declaredType, DataContractResolver knownTypeResolver)
+            {
+                return knownTypeResolver?.ResolveName(typeName, typeNamespace, declaredType, null);
+            }
+
+            public bool TryGetEquivalentContractType(Type type, out Type result)
+            {
+                // Collections are normally serialized as arrays (same xml naming for all)
+                var elementType = TypeUtility.GetElementType(type);
+                if (elementType != type)
+                {
+                    if (elementType.IsGenericType
+                        && elementType.GetGenericTypeDefinition() == typeof(KeyValuePair<,>)
+                        && typeof(IDictionary<,>)
+                            .MakeGenericType(elementType.GetGenericArguments())
+                            .IsAssignableFrom(type))
+                    {
+                        result = typeof(Dictionary<,>).MakeGenericType(elementType.GetGenericArguments());
+                    }
+                    else // general array
+                    {
+                        result = elementType.MakeArrayType();
+                    }
+
+                    return true;
+                }
+
+                result = null;
+                return false;
+            }
+
+            public override bool TryResolveType(Type type, Type declaredType, DataContractResolver knownTypeResolver, out System.Xml.XmlDictionaryString typeName, out System.Xml.XmlDictionaryString typeNamespace)
+            {
+                if (knownTypeResolver.TryResolveType(type, declaredType, null, out typeName, out typeNamespace))
+                    return true;
+
+                if (_knownTypes.TryGetValue(type, out var match))
+                {
+                    typeName = match.typeName;
+                    typeNamespace = match.typeNamespace;
+
+                    return true;
+                }
+
+                if (TryGetEquivalentContractType(type, out var collectionType)
+                    && type != collectionType)
+                {
+                    if (TryResolveType(collectionType, declaredType, knownTypeResolver, out typeName, out typeNamespace))
+                        _knownTypes.TryAdd(type, (typeName, typeNamespace));
+                    return true;
+                }
+
+                typeName = null;
+                typeNamespace = null;
                 return false;
             }
         }
@@ -562,6 +633,75 @@ namespace OpenRiaServices.DomainServices.Client.PortableWeb
         }
 
         /// <summary>
+        /// Submit need to be able to serialize all types that are part of entity actions as well
+        /// since the parameters are passed in object arrays.
+        ///
+        /// Find all types which are part of parameters and add them
+        /// </summary>
+        /// <remarks>
+        /// Adapted from:
+        /// <see href="https://github.com/Daniel-Svensson/OpenRiaPlayground/blob/43665c1b4febeb2f9ab7a358a75709f52169cb77/HttpClient/OpenRiaServices.Client.HttpDomainClient/BinaryHttpDomainClient.cs#L497">
+        /// OpenRiaPlayground - BinaryHttpDomainClient.cs (GitHub)
+        /// </see>
+        /// </remarks>
+        /// <returns></returns>
+        private DataContractSerializerSettings GetSubmitDataContractSettings()
+        {
+            var resolver = new SubmitDataContractResolver();
+            var visitedTypes = new HashSet<Type>(EntityTypes);
+            var knownTypes = new HashSet<Type>(visitedTypes);
+            var toVisit = new Stack<Type>(knownTypes);
+
+            while (toVisit.Count > 0)
+            {
+                var entityType = toVisit.Pop();
+
+                // Check any derived types to
+                foreach (KnownTypeAttribute derived in entityType.GetCustomAttributes(typeof(KnownTypeAttribute), inherit: false))
+                {
+                    if (visitedTypes.Add(derived.Type))
+                        toVisit.Push(derived.Type);
+                }
+
+                // Ensure all parameter types are known
+                var metaType = MetaType.GetMetaType(entityType);
+                foreach (var entityAction in metaType.GetEntityActions())
+                {
+                    var method = entityType.GetMethod(entityAction.Name);
+                    foreach (var parameter in method.GetParameters())
+                    {
+                        var type = parameter.ParameterType;
+                        if (visitedTypes.Add(type))
+                        {
+                            // Most "primitive types" are already registered
+                            if (TypeUtility.IsPredefinedSimpleType(type))
+                            {
+                                if (typeof(DateTimeOffset) == type || type.IsEnum)
+                                    knownTypes.Add(type);
+                            }
+                            else if (resolver.TryGetEquivalentContractType(type, out var collectionType))
+                            {
+                                knownTypes.Add(collectionType);
+                                // Add elementType too ??
+                            }
+                            else
+                            {
+                                knownTypes.Add(type);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return new DataContractSerializerSettings()
+            {
+                KnownTypes = knownTypes,
+                DataContractResolver = resolver,
+                SerializeReadOnlyTypes = true
+            };
+        }
+
+        /// <summary>
         /// Gets a <see cref="DataContractSerializer"/> which can be used to serialized the specified type.
         /// The serializers are cached for performance reasons.
         /// </summary>
@@ -574,14 +714,20 @@ namespace OpenRiaServices.DomainServices.Client.PortableWeb
             {
                 if (!_serializerCache.TryGetValue(type, out serializer))
                 {
-                    // TODO: ENsure that DateTimeOffset is part of known types 
-                    // Unlike other primitive types, the DateTimeOffset structure is not a known type by default, so it must be manually added to the list of known types.
-
-                    serializer = new DataContractSerializer(type, new DataContractSerializerSettings
+                    if (type != typeof(List<ChangeSetEntry>))
                     {
-                        KnownTypes=EntityTypes,
-                        SerializeReadOnlyTypes=true
-                    });
+                        serializer = new DataContractSerializer(type, new DataContractSerializerSettings()
+                        {
+                            KnownTypes = EntityTypes,
+                            SerializeReadOnlyTypes = true
+                        });
+                    }
+                    else
+                    {
+                        // Submit need to be able to serialize all types that are part of entity actions as well
+                        // since the parameters are passed in object arrays
+                        serializer = new DataContractSerializer(type, GetSubmitDataContractSettings());
+                    }
                     _serializerCache.Add(type, serializer);
                 }
             }
