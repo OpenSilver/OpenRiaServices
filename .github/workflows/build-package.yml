@@ -1,101 +1,82 @@
 name: OpenRia Build
+
 env:
-  solution: 'OpenRiaServices.OpenSilver.sln'
-  opensilver-package-source: 'https://www.myget.org/F/opensilver/api/v3/index.json'
-  next-release-version: '3.4.0'
-  suffix: 'preview'
+  NEXT_RELEASE_VERSION: '3.4.0'
+
 on:
-  # We run the process manually and pass the version of actual OpenSilver
   workflow_dispatch:
     inputs:
-      opensilver-version:
-        description: 'OpenSilver package version'
-        default: 'latest'
-        required: true
-  schedule:
-  # Every Sunday at 5AM UTC
-    - cron: "0 5 * * 0"
+        opensilver-version:
+            description: 'OpenSilver version'
+            required: true
+        version:
+            description: 'OpenSilver.OpenRiaServices.* packages version'
+            required: false
+            default: ''
+        publish-myget:
+            description: 'Publish to MyGet.org'
+            required: false
+            type: boolean
+            default: true
+        publish-nuget-org:
+            description: 'Publish to NuGet.org'
+            required: false
+            type: boolean
+            default: false
+
 jobs:
   OpenRia-Build:
+    if: github.repository_owner == 'OpenSilver'
     runs-on: windows-latest
     steps:
-      - uses: microsoft/setup-msbuild@v1.0.3
+      - uses: microsoft/setup-msbuild@v1.1
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@v3.x
-      - uses: actions/setup-dotnet@v1
+      - uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: '6.0.101'
-      - name: Clone repo
-        uses: actions/checkout@v2
+          dotnet-version: '10.x'
+          dotnet-quality: 'ga'
+
+      - name: Clone OpenRiaServices repo
+        uses: actions/checkout@v3
         with:
           ref: ${{ github.ref }}
-      - name: Add Rc package source
+
+      - name: Format Package Version
+        id: version
+        shell: pwsh
         run: |
-          nuget sources Add -Name opensilver-private-rc -Source "${{ secrets.MYGET_PRIVATE_RC_FEED_V3 }}" -username "${{ secrets.MYGET_PRIVATE_USERNAME }}" -password "${{ secrets.MYGET_PRIVATE_APIKEY }}"
-        if: env.suffix == 'rc'
-      - name: Fill vars
-        id: vars
-        run: |
-          $version = "${{ github.event.inputs.opensilver-version }}"
-          $source = "${{ env.opensilver-package-source }}"
-          $suffix = "${{ env.suffix }}"
-          if ($suffix -eq "rc") {
-            $source = "${{ secrets.MYGET_PRIVATE_RC_FEED_V3 }}"
+          $v = "${{ github.event.inputs.version }}"
+          if ([string]::IsNullOrWhiteSpace($v))
+          {
+            $timestamp = Get-Date -Format "yyyy-MM-dd-HHmmss"
+            $v = "$env:NEXT_RELEASE_VERSION-preview-$timestamp-$env:GITHUB_SHA_SHORT"
           }
-          if ($version -eq "latest" -or $version -eq "") {
-            $version = nuget list -Source $source -Prerelease | ? { $_ -match "^OpenSilver\s+(.*)" } | ForEach { $_.split(" ")[1] }
-          }
-          echo "Version: $version"
-          echo "::set-output name=opensilver-version::$version"
-          echo "::set-output name=suffix::$(date +'%Y-%m-%d-%H%M%S')-${{ env.GITHUB_SHA_SHORT }}"
-      - name: Remove OpenSilver packages for all projects
-        working-directory: src
-        run: |
-          foreach ($project in dotnet sln ${{ env.solution }} list | Select-Object -Skip 2) {
-            dotnet remove $project package OpenSilver
-            if (-not $?) {throw "Failed to remove package"}
-          }
-        env:
-          DOTNET_NOLOGO: true
-      - name: Add OpenSilver package for all projects
-        working-directory: src
-        run: |
-          foreach ($project in dotnet sln ${{ env.solution }} list | Select-Object -Skip 2) {
-            dotnet add $project package OpenSilver -v ${{ steps.vars.outputs.opensilver-version }}
-            if (-not $?) {throw "Failed to add package"}
-          }
-        env:
-          DOTNET_NOLOGO: true
+          "value=$v" >> $env:GITHUB_OUTPUT
+
       - name: Build solution
         working-directory: src
         run: |
-          msbuild ${{ env.solution }} -p:Configuration=Release -clp:ErrorsOnly -restore
-      - name: Format Version Suffix
-        id: format-suffix
-        run: echo "::set-output name=suffix::$(date +'%Y-%m-%d-%H%M%S')-${{ env.GITHUB_SHA_SHORT }}"
-      - name: Format Package Version
-        id: format-version
-        run: echo "::set-output name=version::${{ env.next-release-version }}-${{env.suffix}}-${{ steps.format-suffix.outputs.suffix }}"
+          msbuild OpenRiaServices.OpenSilver.sln -p:Configuration=Release -p:OpenSilverPackageVersion=${{ github.event.inputs.opensilver-version }} -clp:ErrorsOnly -restore
+
       - name: Build packages
         working-directory: NuGet
         run: |
-          .\Pack-Client-OpenSilver.ps1 -Version ${{ steps.format-version.outputs.version }} -OpenSilverDependencyVersion ${{ steps.vars.outputs.opensilver-version }} -RepositoryUrl https://github.com/${{ env.GITHUB_REPOSITORY_OWNER_PART }}/${{ env.GITHUB_REPOSITORY_NAME_PART }}
+          .\Pack-Client-OpenSilver.ps1 -Version ${{ steps.version.outputs.value }} -OpenSilverDependencyVersion ${{ github.event.inputs.opensilver-version }} -RepositoryUrl https://github.com/${{ env.GITHUB_REPOSITORY_OWNER_PART }}/${{ env.GITHUB_REPOSITORY_NAME_PART }}
+
       - name: Upload packages
         run: |
            dotnet nuget push "NuGet\bin\opensilver\*.nupkg" -k ${{ secrets.GITHUB_TOKEN }} -s https://nuget.pkg.github.com/${{ env.GITHUB_REPOSITORY_OWNER_PART }}/index.json
+
       - name: Upload packages to MyGet
-        if: github.repository_owner == 'OpenSilver' && env.suffix == 'preview'
         run: |
            dotnet nuget push "NuGet\bin\opensilver\*.nupkg" -k ${{ secrets.MYGET_TOKEN }} -s https://www.myget.org/F/opensilver/api/v2/package
-      - name: Upload packages to MyGet RC
-        if: github.repository_owner == 'OpenSilver' && env.suffix == 'rc'
+
+      - name: Upload packages to NuGet.org
+        if: ${{ inputs['publish-nuget-org'] }}
         run: |
-           dotnet nuget push "NuGet\bin\opensilver\*.nupkg" -k ${{ secrets.MYGET_PRIVATE_RC_FEED_TOKEN }} -s ${{ secrets.MYGET_PRIVATE_RC_FEED }}
-      - name: Pack OpenRia Final Release
-        working-directory: NuGet
-        run: |
-          .\Pack-Client-OpenSilver.ps1 -Version ${{ env.next-release-version }} -OpenSilverDependencyVersion ${{ env.next-release-version }} -RepositoryUrl https://github.com/${{ env.GITHUB_REPOSITORY_OWNER_PART }}/${{ env.GITHUB_REPOSITORY_NAME_PART }}
-        if: env.suffix == 'rc'
+          dotnet nuget push "NuGet\bin\opensilver\*.nupkg" -k ${{ secrets.NUGET_ORG_API_KEY }} -s https://api.nuget.org/v3/index.json
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
