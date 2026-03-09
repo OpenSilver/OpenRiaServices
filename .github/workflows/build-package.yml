@@ -18,6 +18,11 @@ on:
             required: false
             type: boolean
             default: true
+        publish-myget-rc:
+            description: 'Publish to MyGet.org RC feed'
+            required: false
+            type: boolean
+            default: false
         publish-nuget-org:
             description: 'Publish to NuGet.org'
             required: false
@@ -69,8 +74,14 @@ jobs:
            dotnet nuget push "NuGet\bin\opensilver\*.nupkg" -k ${{ secrets.GITHUB_TOKEN }} -s https://nuget.pkg.github.com/${{ env.GITHUB_REPOSITORY_OWNER_PART }}/index.json
 
       - name: Upload packages to MyGet
+        if: ${{ inputs['publish-myget'] }}
         run: |
            dotnet nuget push "NuGet\bin\opensilver\*.nupkg" -k ${{ secrets.MYGET_TOKEN }} -s https://www.myget.org/F/opensilver/api/v2/package
+
+      - name: Upload packages to MyGet RC feed
+        if: ${{ inputs['publish-myget-rc'] }}
+        run: |
+           dotnet nuget push "NuGet\bin\opensilver\*.nupkg" -k ${{ secrets.MYGET_RC_TOKEN }} -s ${{ secrets.MYGET_RC_FEED }}
 
       - name: Upload packages to NuGet.org
         if: ${{ inputs['publish-nuget-org'] }}
