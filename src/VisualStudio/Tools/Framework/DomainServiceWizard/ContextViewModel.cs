@@ -25,6 +25,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
     {
         private readonly BusinessLogicModel _businessLogicModel;
         private readonly ContextData _contextData;
+        private readonly string _name;
         private List<EntityViewModel> _entities;
 
         /// <summary>
@@ -39,6 +40,9 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
 
             this._businessLogicModel = businessLogicModel;
             this._contextData = contextData;
+
+            // Captured up front for the same reason as EntityViewModel._name.
+            this._name = contextData.Name;
         }
 
         /// <summary>
@@ -48,7 +52,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         {
             get
             {
-                return this.ContextData.Name;
+                return this._name;
             }
         }
 

@@ -16,6 +16,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
     {
         private readonly ContextViewModel _contextViewModel;
         private readonly EntityData _entityData;
+        private readonly string _name;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityViewModel"/> class.
@@ -26,6 +27,11 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         {
             this._contextViewModel = contextViewModel;
             this._entityData = entityData;
+
+            // Captured up front: UI Automation calls ToString() during a layout pass that can happen
+            // after BusinessLogicViewModel unloaded the AppDomain owning this EntityData, and reading
+            // the proxy then throws AppDomainUnloadedException on the dispatcher, killing devenv.
+            this._name = entityData.Name;
         }
 
         /// <summary>
@@ -58,7 +64,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         {
             get
             {
-                return this.EntityData.Name;
+                return this._name;
             }
         }
 
