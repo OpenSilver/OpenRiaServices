@@ -113,7 +113,7 @@ namespace OpenRiaServices.DomainServices.Client
         private static WcfDomainClientFactory CreateDefaultDomainClientFactory()
         {
 
-#if NETSTANDARD
+#if OPENSILVER
             return new WebAssemblySoapDomainClientFactory();
 #else
             return new WebDomainClientFactory();

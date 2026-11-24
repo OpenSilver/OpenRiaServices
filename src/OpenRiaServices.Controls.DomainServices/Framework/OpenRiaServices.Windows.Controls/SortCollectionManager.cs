@@ -405,7 +405,7 @@ namespace OpenRiaServices.Controls
         /// <returns><c>true</c> if the two are equivalent</returns>
         private static bool AreEquivalent(SortDescription sortDescription, SortDescriptor sortDescriptor)
         {
-            Debug.Assert((sortDescription != null) && (sortDescriptor != null), "Both should be non-null.");
+            Debug.Assert(sortDescriptor != null, "sortDescriptor should be non-null.");
 
             return (sortDescription.Direction == sortDescriptor.Direction) &&
                 (sortDescription.PropertyName == sortDescriptor.PropertyPath);
