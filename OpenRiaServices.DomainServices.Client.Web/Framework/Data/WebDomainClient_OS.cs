@@ -226,7 +226,7 @@ namespace OpenRiaServices.DomainServices.Client
             get
             {
                 return _webDomainClientFactory
-#if NETSTANDARD
+#if OPENSILVER
                     ?? (_webDomainClientFactory = new WebAssemblyDomainClientFactory());
 #else
                     ?? (_webDomainClientFactory = new WebDomainClientFactory());

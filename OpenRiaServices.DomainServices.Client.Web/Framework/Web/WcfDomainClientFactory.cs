@@ -8,7 +8,7 @@ using System.ServiceModel.Dispatcher;
 
 namespace OpenRiaServices.DomainServices.Client.Web
 {
-#if NETSTANDARD
+#if OPENSILVER
     /// <summary>
     /// Base class DomainClientFactories targeting WCF and creating <see cref="WebDomainClient{TContract}"/> instances.
     /// For most uses you should use a concerete implementation such as 

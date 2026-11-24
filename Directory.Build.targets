@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <OpenSilverPackageVersion>3.3.0</OpenSilverPackageVersion>
+    <OpenSilverPackageVersion>3.4.0-preview-2026-11-20-102406-941451b4</OpenSilverPackageVersion>
     <EnableAdditionalMetadataAttributes>true</EnableAdditionalMetadataAttributes>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
